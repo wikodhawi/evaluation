@@ -1,0 +1,205 @@
+<?page title="Purchase Order Detail" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="Purchase Order Detail" border="normal"
+apply="org.zkoss.bind.BindComposer"
+viewModel="@id('vm') @init('vmd.PurchaseOrderDetailVmd')">
+${arg.dtoAdd.orderId }
+<hlayout>
+	<button label="Back" onClick="@command('back')"></button>
+	<button label="Save" onClick="@command('save')"></button>
+</hlayout>
+<space></space>
+	
+		<listbox id="box"> 
+			<listitem> 
+				<listcell>
+				
+				</listcell>
+				<listcell>
+					<label value="PO No"></label>
+				</listcell> 
+				<listcell>
+					<textbox constraint="no empty: harus diisi" value="@bind(vm.poDto.poNo)" readonly="false"></textbox> 	
+				</listcell>
+				<listcell>
+				
+				</listcell>
+				<listcell>
+					<label value="PO Date"></label>
+				</listcell>
+				<listcell>
+					<datebox onChange="@command('changeAging')" format="dd/MM/yyyy" value="@bind(vm.poDto.poDate)" ></datebox>
+				</listcell>
+				<listcell>
+				
+				</listcell>
+			 </listitem>
+			 <listitem> 
+				<listcell>
+				
+				</listcell>
+				<listcell>
+					<label value="Supplier Name"></label>
+				</listcell> 
+				<listcell>
+				
+				
+					<combobox model="@load(vm.supplierDtos)" selectedItem="@bind(vm.supplierDto)"
+						value="@bind(vm.supplierDto.supName)" >
+							<template name="model">
+								<comboitem label="@bind(each.supName)" value="@bind(each.supId)"></comboitem>
+							</template>
+					</combobox>
+				
+				
+				
+				 	
+				</listcell>
+				<listcell>
+				
+				</listcell>
+				<listcell>
+					<label value="PO Exp Date"></label>
+				</listcell>
+				<listcell>
+					<datebox onChange="@command('changeAging')" format="dd/MM/yyyy" value="@bind(vm.poDto.poExpDate)" ></datebox>
+				</listcell>
+				<listcell>
+				
+				</listcell>
+			 </listitem>    
+			 <listitem> 
+				<listcell>
+				
+				</listcell>
+				<listcell>
+					<label value="Address"></label>
+				</listcell> 
+				<listcell>
+					<textbox constraint="no empty: harus diisi" value="@bind(vm.supplierDto.supAddress)" rows="2" ></textbox> 	
+				</listcell>
+				<listcell>
+				
+				</listcell>
+				<listcell>
+					<label value="Aging"></label>
+				</listcell>
+				<listcell>
+					<intbox value="@bind(vm.aging)" readonly="true"></intbox>
+				</listcell>
+				<listcell>
+				
+				</listcell>
+			 </listitem>
+			 <listitem> 
+				<listcell>
+				
+				</listcell>
+				<listcell>
+					<label value="Province"></label>
+				</listcell> 
+				<listcell>
+					<combobox model="@load(vm.provinceDtos)" selectedItem="@bind(vm.provinceDto)"
+						value="@bind(vm.provinceDto.provName)" onChange="@command('changeCity')">
+							<template name="model">
+								<comboitem label="@bind(each.provName)" value="@bind(each.provId)"></comboitem>
+							</template>
+					</combobox> 	
+				</listcell>
+				<listcell>
+				
+				</listcell>
+				<listcell>
+					<label value="Shipment"></label>
+				</listcell>
+				
+				<listcell>
+				
+					<radiogroup  selectedItem="@bind(vm.poDto.poShipment)">
+						<radio value="F" label="Full" id="F"></radio>
+						<radio value="P" label="Partial" id="P" ></radio>
+					</radiogroup>
+				</listcell>
+				<listcell>
+				
+				</listcell>
+			 </listitem>
+			 <listitem> 
+				<listcell>
+				
+				</listcell>
+				<listcell>
+					<label value="City"></label>
+				</listcell> 
+				<listcell>
+					<combobox model="@load(vm.cityDtos)" selectedItem="@bind(vm.cityDto)"
+						value="@bind(vm.cityDto.cityName)">
+							<template name="model">
+								<comboitem label="@bind(each.cityName)" value="@bind(each.cityId)"></comboitem>
+							</template>
+					</combobox> 	
+				</listcell>
+				<listcell>
+				
+				</listcell>
+				<listcell>
+					<label value="Notes"></label>
+				</listcell>
+				<listcell>
+					<textbox constraint="no empty: harus diisi" value=" @bind(vm.poDto.poNotes)" readonly="false"></textbox>	
+				</listcell>
+				<listcell>
+				
+				</listcell>
+			 </listitem>    
+		</listbox>
+	
+	
+	<separator></separator>
+	<separator></separator>
+	<separator></separator>
+	<separator></separator>
+	<separator></separator>
+	<separator></separator>
+	<hlayout>
+		<button label="Add Product" onClick="@command('addProduct')"></button>
+		<button label="Delete Product" onClick="@command('deleteProduct')"></button>
+	</hlayout>
+	<separator></separator>
+	<separator></separator>
+	<separator></separator>
+	<separator></separator>
+	
+	<listbox model="@load(vm.poDetailDtos)" selectedItem="@bind(vm.poDetailDto)" emptyMessage="kosong"
+  			id="box2" mold="paging" pagingPosition="bottom" pageSize="5"
+  		>
+			<listhead>
+				<listheader label="Item Name"></listheader>
+				<listheader label="Price"></listheader>
+				<listheader label="Quantity"></listheader>
+				<listheader label="Sub Total"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.itemName)"/>
+					<listcell label="@load(each.itemPrice) @converter('formatedNumber', format='#,##0')"/>
+					<listcell label="@load(each.itemQty)"/>
+					<listcell label="@load(each.subTotal) @converter('formatedNumber', format='#,##0') "/>
+				</listitem>
+			</template>
+		</listbox>
+		<separator></separator>
+		<div align="right">
+			<label value="%discount" ></label>
+			<textbox value="@bind(vm.poDto.discount)" onChange="@command('getTotal')"></textbox>
+			<separator></separator>
+			<label value="Total"></label>
+			<textbox value="@bind(vm.poDto.total) @converter('formatedNumber', format='#,##0')" readonly="true"></textbox>
+		</div>
+		
+		<space></space>
+	
+</window>
+
+
+</zk>

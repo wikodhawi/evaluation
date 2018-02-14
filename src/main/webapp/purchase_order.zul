@@ -1,0 +1,35 @@
+<?page title="Purchase Order" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window title="Purchase Order" border="normal" apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('vmd.PurchaseOrderVmd')">
+		Search:
+		<textbox value="@save(vm.search)"></textbox>
+		<button label="Search" onClick="@command('search')"></button>
+		<separator/>
+		<separator/>
+		<button  label="Add" onClick="@command('add')"></button>
+		<button label="Edit" onClick="@command('edit')"></button>
+		<button label="Delete" onClick="@command('delete')"></button>
+	
+  		
+  		<listbox model="@load(vm.poDtos)" selectedItem="@bind(vm.poDto)" emptyMessage="kosong"
+  			id="box" mold="paging" pagingPosition="bottom" pageSize="5"
+  		>
+			<listhead>
+				<listheader label="PO No"></listheader>
+				<listheader label="Supplier Name"></listheader>
+				<listheader label="PO Date"></listheader>
+				<listheader label="Total"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.poNo)"/>
+					<listcell label="@load(each.supName)"/>
+					<listcell label="@load(each.poDate) @converter('formatedDate',format='dd-MMM-yyyy')"/>
+					<listcell label="@load(each.total) @converter('formatedNumber', format='#,##0') "/>
+				</listitem>
+			</template>
+		</listbox>
+		
+	</window>
+</zk>
