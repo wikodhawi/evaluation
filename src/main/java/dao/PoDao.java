@@ -15,6 +15,6 @@ public interface PoDao extends JpaRepository<Po, PoPK> {
 	@Query("select p,s.supName from Po p, Supplier s where p.supId=s.supId")
 	public List<Object[]> findAllPo();
 	
-	@Query("select p,s.supName from Po p, Supplier s where p.supId=s.supId and p.poNo like ? and s.supName like ? ")
+	@Query("select p,s.supName from Po p, Supplier s where p.supId=s.supId and (p.poNo like ? or s.supName like ? )")
 	public List<Object[]> findAllPoByPONoSupName(String search, String search2);
 }

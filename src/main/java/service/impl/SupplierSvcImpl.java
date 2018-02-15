@@ -36,6 +36,7 @@ public class SupplierSvcImpl implements SupplierSvc {
 			SupplierDto supplierDto=new SupplierDto();
 			supplierDto.setSupId(supplier.getSupId());
 			supplierDto.setSupName(supplier.getSupName());
+			supplierDto.setSupAddress(supplier.getSupAddress());
 			supplierDtos.add(supplierDto);
 			
 		}

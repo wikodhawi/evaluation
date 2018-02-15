@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import dao.ProvinceDao;
 import dto.ProvinceDto;
 import entity.Province;
+import entity.ProvincePK;
 import service.ProvinceSvc;
 
 @Service("provinceSvc") // copy nama interface dan buat jadi huruf kecil nama servicenya
@@ -32,6 +33,18 @@ public class ProvinceSvcImpl implements ProvinceSvc {
 			
 		}
 		return provinceDtos;
+	}
+
+	@Override
+	public ProvinceDto findOne(String provId) {
+		ProvinceDto provinceDto=new ProvinceDto();
+		ProvincePK provincePK=new ProvincePK();
+		provincePK.setProvId(provId);
+		Province province=provinceDao.findOne(provincePK);
+		provinceDto.setProvId(province.getProvId());
+		provinceDto.setProvName(province.getProvName());
+		
+		return provinceDto;
 	}
 
 }

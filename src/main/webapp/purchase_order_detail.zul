@@ -10,7 +10,7 @@ ${arg.dtoAdd.orderId }
 </hlayout>
 <space></space>
 	
-		<listbox id="box"> 
+		<listbox id="box" > 
 			<listitem> 
 				<listcell>
 				
@@ -172,6 +172,7 @@ ${arg.dtoAdd.orderId }
 	
 	<listbox model="@load(vm.poDetailDtos)" selectedItem="@bind(vm.poDetailDto)" emptyMessage="kosong"
   			id="box2" mold="paging" pagingPosition="bottom" pageSize="5"
+  			checkmark="true" multiple="true"
   		>
 			<listhead>
 				<listheader label="Item Name"></listheader>

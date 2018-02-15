@@ -62,7 +62,6 @@ public class PurchaseOrderDetailVmd {
 	private ProvinceDto provinceDto;
 	
 	
-	
 	public List<ProvinceDto> getProvinceDtos() {
 		return provinceDtos;
 	}
@@ -189,10 +188,11 @@ public class PurchaseOrderDetailVmd {
 		poDto= (PoDto) Sessions.getCurrent().getAttribute("dto");
 		if(poDto.getPoDate()!=null && poDto.getPoExpDate()!=null)
 		{
-			aging=Math.abs(poDto.getPoDate().getDate()-poDto.getPoExpDate().getDate());
+//			aging=Math.abs(poDto.getPoDate().getDate()-poDto.getPoExpDate().getDate());
+			aging=(int) Math.abs((poDto.getPoDate().getTime()-poDto.getPoExpDate().getTime())/86400000);
 //			aging=poDto.getPoExpDate().compareTo(poDto.getPoDate());
 //			aging=Math.abs(poDto.getPoDate().getTimezoneOffset()-poDto.getPoExpDate().getTimezoneOffset());
-		
+//			aging=(int) Math.abs(poDto.getPoDate().getTime()-poDto.getPoExpDate().getTime())/86400000;
 		}
 		
 		if(poDto.getPoNo()!=null)
@@ -202,6 +202,10 @@ public class PurchaseOrderDetailVmd {
 //			System.out.println(poDto.getPoNo());
 //			poDetailDtos=poDetailSvc.findAll();
 			
+		}
+		else {
+			poDetailDtos=poDetailSvc.findAllPoDetail(poDto.getPoNo());
+			Sessions.getCurrent().setAttribute("poDetailDtos", poDetailDtos);
 		}
 		
 		provinceDtos=provinceSvc.findAll();
@@ -216,6 +220,7 @@ public class PurchaseOrderDetailVmd {
 		}
 		if(poDto.getCityId() != null){
 			cityDto= citySvc.findOne(poDto.getCityId());
+			provinceDto=provinceSvc.findOne(cityDto.getProvId());
 		}
 		if(poDto!=null)
 		{
@@ -252,7 +257,7 @@ public class PurchaseOrderDetailVmd {
 	}
 	
 	@Command
-	@NotifyChange("orderDetailDtos")
+	@NotifyChange("poDetailDtos")
 	public void deleteProduct()
 	{
 		if(poDto!=null)
@@ -273,7 +278,7 @@ public class PurchaseOrderDetailVmd {
 						poDetailDto=null;
 						BindUtils.postNotifyChange(null, null, PurchaseOrderDetailVmd.this, "poDetailDtos");
 						Messagebox.show("Data berhasil di hapus");
-						
+						Executions.sendRedirect("purchase_order_detail.zul");
 					}
 					
 					
@@ -285,6 +290,7 @@ public class PurchaseOrderDetailVmd {
 		else {
 			Messagebox.show("Silahkan pilih data");
 		}
+		
 		
 	}
 	
@@ -311,7 +317,12 @@ public class PurchaseOrderDetailVmd {
 	@NotifyChange("aging")
 	@Command
 	public void changeAging() {
-		aging=Math.abs(poDto.getPoDate().getDate()-poDto.getPoExpDate().getDate());
+//		aging=Math.abs(poDto.getPoDate().getDate()-poDto.getPoExpDate().getDate());
+		
+		
+		aging=(int) Math.abs((poDto.getPoDate().getTime()-poDto.getPoExpDate().getTime())/86400000);
+		
+		
 //		aging=Math.abs(poDto.getPoDate().compareTo(poDto.getPoExpDate()));
 //		aging=poDto.getPoExpDate()..compareTo(poDto.getPoDate());
 //		aging=poDto.getPoExpDate().compareTo(poDto.getPoDate());

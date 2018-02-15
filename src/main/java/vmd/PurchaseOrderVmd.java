@@ -29,7 +29,7 @@ public class PurchaseOrderVmd {
 	private PoDto poDto;
 	private List<PoDetailDto> poDetailDtos;
 	private PoDetailDto poDetailDto;
-	
+	private String search;
 	
 	
 	
@@ -86,6 +86,21 @@ public class PurchaseOrderVmd {
 		this.poDto = poDto;
 	}
 
+	
+	
+
+
+	public String getSearch() {
+		return search;
+	}
+
+
+
+
+	public void setSearch(String search) {
+		this.search = search;
+	}
+
 
 
 
@@ -102,11 +117,29 @@ public class PurchaseOrderVmd {
 	{
 		PoDto poDto= new PoDto();
 		
-		poDetailDtos= (List<PoDetailDto>) Sessions.getCurrent().getAttribute("poDetailDtos");
-		poDetailDtos.clear();
-		Sessions.getCurrent().setAttribute("poDetailDtos", poDetailDtos);
+//		poDetailDtos= (List<PoDetailDto>) Sessions.getCurrent().getAttribute("poDetailDtos");
+//		poDetailDtos.clear();
+//		Sessions.getCurrent().setAttribute("poDetailDtos", poDetailDtos);
 		Sessions.getCurrent().setAttribute("dto", poDto);
 		Executions.sendRedirect("purchase_order_detail.zul");
+		
+	}
+	
+	@Command
+	public void search()
+	{
+//		Messagebox.show(search);
+		List<PoDto> poDtoSearch=poSvc.findAllPoByPONoSupName(search, search);
+		if (poDtoSearch.size()>0) {
+			poDtos=poDtoSearch;
+			BindUtils.postNotifyChange(null, null, this, "poDtos");// sama seperti notify change secara program
+		} else {
+			Messagebox.show("Not found");
+//			productDtos=productSvc.findAll();
+//			BindUtils.postNotifyChange(null, null, this, "productDtos");
+		}
+		
+		
 		
 	}
 	
